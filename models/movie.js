@@ -1,0 +1,43 @@
+const mongoose = require("mongoose");
+
+const movieSchema = new mongoose.Schema(
+    {
+        title: {
+            type: String,
+            required: [true, "Movie title is required"],
+            trim: true,
+            minlength: [1, "Movie title cannot be empty"],
+        },
+        year: {
+            type: Number,
+            required: [true, "Released year is required"],
+            min: [1888, "Release year must be 1888 or later"],
+            max: [2100, " Release year must be 2100 or earlier"],
+        },
+        genre: {
+            type: String,
+            required: [true, "Director is required"],
+            trim: true,
+        },
+        director: {
+            type: String,
+            required: [true, "Director is required"],
+            trim: true,
+        },
+        rating: {
+            type: Number,
+            required: [true, "Rating is required"],
+            min: [0, "Rating cannot be below 0"],
+            max: [10, "Rating cannot be above 10"],
+        },
+        favorite: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    {
+        timestamps: true,
+    }
+);
+
+module.exports = mongoose.model("movie", movieSchema);
