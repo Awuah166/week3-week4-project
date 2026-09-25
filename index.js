@@ -4,6 +4,7 @@ const express = require("express");
 const connectDB = require("./database/db");
 const swaggerDocument = require("./swagger.json");
 const movieRoutes = require("./routes/movieRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
 
@@ -29,6 +30,7 @@ app.get("/swagger.json", (req, res) => {
 });
 
 app.use("/api/movies", movieRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

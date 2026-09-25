@@ -13,11 +13,16 @@ const movieSchema = new mongoose.Schema(
             required: [true, "Released year is required"],
             min: [1888, "Release year must be 1888 or later"],
             max: [2100, " Release year must be 2100 or earlier"],
+            validate: {
+                validator: Number.isInteger,
+                message: "Release year must be a whole number",
+            },
         },
         genre: {
             type: String,
-            required: [true, "Director is required"],
+            required: [true, "Genre is required"],
             trim: true,
+            minlength: [1, "Genre cannot be empty"],
         },
         director: {
             type: String,

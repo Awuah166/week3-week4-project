@@ -39,6 +39,10 @@ const createMovie = async (req, res, next) => {
 
 const updateMovie = async (req, res, next) => {
     try {
+        if (!req.body || typeof req.body !== "object" || Array.isArray(req.body) || Object.keys(req.body).length === 0) {
+            return res.status(400).json({ message: "Update body must be a non-empty JSON object" });
+        }
+
         if (!mongoose.isValidObjectId(req.params.id)) {
             return res.status(400).json({ message: "Invalid movie ID" });
         }
@@ -47,7 +51,7 @@ const updateMovie = async (req, res, next) => {
             req.params.id,
             req.body,
             {
-                new: true,
+                returnDocument: "after",
                 runValidators: true,
             }
         );

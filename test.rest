@@ -1,5 +1,6 @@
 @baseUrl = http://localhost:3000
 @movieId = 000000000000000000000000
+@reviewId = 000000000000000000000000
 
 ### 1. Health check
 GET {{baseUrl}}/health
@@ -49,3 +50,50 @@ Content-Type: application/json
 
 ### 8. Invalid movie id test
 GET {{baseUrl}}/api/movies/invalid-id
+
+### 9. Create a review
+POST {{baseUrl}}/api/movies/{{movieId}}/reviews
+Content-Type: application/json
+
+{
+  "reviewer": "Alex Example",
+  "rating": 9,
+  "comment": "Inventive and tightly paced."
+}
+
+### 10. Get all reviews
+GET {{baseUrl}}/api/reviews
+
+### 10a. Get reviews for a movie
+GET {{baseUrl}}/api/movies/{{movieId}}/reviews
+
+### 11. Get one review by id
+GET {{baseUrl}}/api/reviews/{{reviewId}}
+
+### 11a. Get one review by movie id and review id
+GET {{baseUrl}}/api/movies/{{movieId}}/reviews/{{reviewId}}
+
+### 12. Update a review
+PUT {{baseUrl}}/api/movies/{{movieId}}/reviews/{{reviewId}}
+Content-Type: application/json
+
+{
+  "rating": 9.5
+}
+
+### 13. Delete a review
+DELETE {{baseUrl}}/api/movies/{{movieId}}/reviews/{{reviewId}}
+
+### 14. Reject an invalid review update
+PUT {{baseUrl}}/api/reviews/{{reviewId}}
+Content-Type: application/json
+
+{
+  "rating": 15
+}
+
+### 15. Reject an empty movie update
+PUT {{baseUrl}}/api/movies/{{movieId}}
+Content-Type: application/json
+
+{}
