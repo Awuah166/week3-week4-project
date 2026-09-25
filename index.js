@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const connectDB = require("./database/db");
+const swaggerDocument = require("./swagger.json");
 const movieRoutes = require("./routes/movieRoutes");
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
@@ -21,6 +22,10 @@ app.get("/health", (req, res) => {
     res.status(200).json({
         status: "ok",
     });
+});
+
+app.get("/swagger.json", (req, res) => {
+    res.status(200).json(swaggerDocument);
 });
 
 app.use("/api/movies", movieRoutes);
