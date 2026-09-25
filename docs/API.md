@@ -35,7 +35,7 @@ http://localhost:3000
 
 1. Open Thunder Client in VS Code.
 2. Create a new request collection called `Favorite Movies API`.
-3. Use the requests in `routes/test.rest` as your step-by-step test file.
+3. Use the requests in `test.rest` as your step-by-step test file.
 4. Start your server with:
 
 ```bash

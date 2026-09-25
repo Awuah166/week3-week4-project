@@ -1,0 +1,339 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Favorite Movies API",
+    "version": "1.0.0",
+    "description": "CRUD API for managing favorite movies. This API supports GET, POST, PUT, and DELETE operations for movie records in MongoDB Atlas."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    },
+    {
+      "url": "https://your-render-url.onrender.com",
+      "description": "Render deployment URL"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Movies",
+      "description": "Operations for favorite movie records"
+    },
+    {
+      "name": "Health",
+      "description": "Application health check"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Check if the API server is running",
+        "responses": {
+          "200": {
+            "description": "Server is healthy",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/movies": {
+      "get": {
+        "tags": ["Movies"],
+        "summary": "Get all movies",
+        "responses": {
+          "200": {
+            "description": "Successful response with list of movies",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "_id": "64be8ac8f1d6d867f1a6a2b1",
+                    "title": "Inception",
+                    "year": 2010,
+                    "genre": "Sci-Fi",
+                    "director": "Christopher Nolan",
+                    "rating": 8.8,
+                    "favorite": true,
+                    "createdAt": "2026-09-25T00:00:00.000Z",
+                    "updatedAt": "2026-09-25T00:00:00.000Z"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Movies"],
+        "summary": "Create a new movie",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MovieInput"
+              },
+              "example": {
+                "title": "Inception",
+                "year": 2010,
+                "genre": "Sci-Fi",
+                "director": "Christopher Nolan",
+                "rating": 8.8,
+                "favorite": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Movie created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "_id": "64be8ac8f1d6d867f1a6a2b1",
+                  "title": "Inception",
+                  "year": 2010,
+                  "genre": "Sci-Fi",
+                  "director": "Christopher Nolan",
+                  "rating": 8.8,
+                  "favorite": true,
+                  "createdAt": "2026-09-25T00:00:00.000Z",
+                  "updatedAt": "2026-09-25T00:00:00.000Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/movies/{id}": {
+      "get": {
+        "tags": ["Movies"],
+        "summary": "Get a movie by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB movie ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "_id": "64be8ac8f1d6d867f1a6a2b1",
+                  "title": "Inception",
+                  "year": 2010,
+                  "genre": "Sci-Fi",
+                  "director": "Christopher Nolan",
+                  "rating": 8.8,
+                  "favorite": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid movie ID"
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Movies"],
+        "summary": "Update a movie by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB movie ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MovieUpdate"
+              },
+              "example": {
+                "rating": 9.1,
+                "favorite": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Movie updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "_id": "64be8ac8f1d6d867f1a6a2b1",
+                  "title": "Inception",
+                  "year": 2010,
+                  "genre": "Sci-Fi",
+                  "director": "Christopher Nolan",
+                  "rating": 9.1,
+                  "favorite": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid movie ID or validation failed"
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Movies"],
+        "summary": "Delete a movie by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB movie ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie deleted successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Movie deleted successfully",
+                  "movie": {
+                    "_id": "64be8ac8f1d6d867f1a6a2b1",
+                    "title": "Inception",
+                    "year": 2010,
+                    "genre": "Sci-Fi",
+                    "director": "Christopher Nolan",
+                    "rating": 8.8,
+                    "favorite": true
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid movie ID"
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MovieInput": {
+        "type": "object",
+        "required": [
+          "title",
+          "year",
+          "genre",
+          "director",
+          "rating"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Movie title",
+            "example": "Inception"
+          },
+          "year": {
+            "type": "integer",
+            "description": "Release year",
+            "minimum": 1888,
+            "maximum": 2100,
+            "example": 2010
+          },
+          "genre": {
+            "type": "string",
+            "description": "Movie genre",
+            "example": "Sci-Fi"
+          },
+          "director": {
+            "type": "string",
+            "description": "Movie director",
+            "example": "Christopher Nolan"
+          },
+          "rating": {
+            "type": "number",
+            "description": "Movie rating between 0 and 10",
+            "minimum": 0,
+            "maximum": 10,
+            "example": 8.8
+          },
+          "favorite": {
+            "type": "boolean",
+            "description": "Whether the movie is marked as favorite",
+            "example": true
+          }
+        }
+      },
+      "MovieUpdate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Interstellar"
+          },
+          "year": {
+            "type": "integer",
+            "example": 2014
+          },
+          "genre": {
+            "type": "string",
+            "example": "Sci-Fi"
+          },
+          "director": {
+            "type": "string",
+            "example": "Christopher Nolan"
+          },
+          "rating": {
+            "type": "number",
+            "example": 9.1
+          },
+          "favorite": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      }
+    }
+  }
+}
