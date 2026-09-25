@@ -1,0 +1,51 @@
+@baseUrl = http://localhost:3000
+@movieId = 000000000000000000000000
+
+### 1. Health check
+GET {{baseUrl}}/health
+
+### 2. Get all movies
+GET {{baseUrl}}/api/movies
+
+### 3. Create a movie
+POST {{baseUrl}}/api/movies
+Content-Type: application/json
+
+{
+  "title": "Inception",
+  "year": 2010,
+  "genre": "Sci-Fi",
+  "director": "Christopher Nolan",
+  "rating": 8.8,
+  "favorite": true
+}
+
+### 4. Get one movie by id
+GET {{baseUrl}}/api/movies/{{movieId}}
+
+### 5. Update a movie
+PUT {{baseUrl}}/api/movies/{{movieId}}
+Content-Type: application/json
+
+{
+  "rating": 9.1,
+  "favorite": true
+}
+
+### 6. Delete a movie
+DELETE {{baseUrl}}/api/movies/{{movieId}}
+
+### 7. Validation error test
+POST {{baseUrl}}/api/movies
+Content-Type: application/json
+
+{
+  "title": "",
+  "year": 1800,
+  "genre": "Sci-Fi",
+  "director": "Christopher Nolan",
+  "rating": 15
+}
+
+### 8. Invalid movie id test
+GET {{baseUrl}}/api/movies/invalid-id
