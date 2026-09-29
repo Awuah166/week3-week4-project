@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
 const connectDB = require("./database/db");
 const swaggerDocument = require("./swagger.json");
 const movieRoutes = require("./routes/movieRoutes");
@@ -28,6 +29,8 @@ app.get("/health", (req, res) => {
 app.get("/swagger.json", (req, res) => {
     res.status(200).json(swaggerDocument);
 });
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/api/movies", movieRoutes);
 app.use("/api/reviews", reviewRoutes);

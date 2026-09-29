@@ -14,6 +14,8 @@ https://week3-week4-project.onrender.com
 
 The deployed health check is `GET /health`. Confirm it returns HTTP 200 before recording the demo.
 
+Interactive Swagger UI is available at `https://week3-week4-project.onrender.com/api-docs`. The OpenAPI document remains available at `/swagger.json`.
+
 ## Render Deployment Check
 
 In the Render service settings, use `npm install` as the build command and `npm start` as the start command. Set `MONGODB_URI` as a secret environment variable in Render; optionally set `MONGODB_DB`. Make sure MongoDB Atlas allows the deployed service to connect, then deploy the latest commit and verify `https://week3-week4-project.onrender.com/health` returns HTTP 200. Keep actual credentials out of source control and video recordings.
