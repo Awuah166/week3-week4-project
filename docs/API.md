@@ -18,7 +18,15 @@ Interactive Swagger UI is available at `https://week3-week4-project.onrender.com
 
 ## Render Deployment Check
 
-In the Render service settings, use `npm install` as the build command and `npm start` as the start command. Set `MONGODB_URI` as a secret environment variable in Render; optionally set `MONGODB_DB`. Make sure MongoDB Atlas allows the deployed service to connect, then deploy the latest commit and verify `https://week3-week4-project.onrender.com/health` returns HTTP 200. Keep actual credentials out of source control and video recordings.
+In the Render service settings, use `npm install` as the build command and `npm start` as the start command. Set `MONGODB_URI` and a long, random `SESSION_SECRET` as secret environment variables; optionally set `MONGODB_DB`. Configure `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` to enable Google sign-in, then set `APP_BASE_URL` to the deployed origin (for example, `https://week3-week4-project.onrender.com`) or set `GOOGLE_CALLBACK_URL` directly. Register `{APP_BASE_URL}/api/auth/google/callback` as an authorized redirect URI in Google Cloud Console. Make sure MongoDB Atlas allows the deployed service to connect, then deploy and verify the health check. Keep credentials out of source control and recordings.
+
+## Authentication
+
+Create a local account with `POST /api/auth/register` or sign in with `POST /api/auth/login`. Passwords must be 12 to 72 UTF-8 bytes and are stored as bcrypt hashes, never as plaintext. Successful registration and login issue the `movie.sid` HTTP-only session cookie. Sessions are stored in MongoDB; logout destroys the server-side session and clears the cookie. The cookie uses `SameSite=Lax` and is marked `Secure` in production.
+
+Google sign-in is available at `GET /api/auth/google` when the Google client credentials are configured. The OAuth callback only accepts a Google account with a verified email. Registration, password login, and Google sign-in initiation are rate-limited, and Helmet sets standard security headers. For local startup, add a unique random `SESSION_SECRET` to your untracked `.env` file; it is required even when Google sign-in is disabled.
+
+All `/api/movies` and `/api/reviews` routes require an authenticated session, including reads. Requests without a valid session receive `401 Authentication required`. `GET /api/auth/me` returns the current account, and `POST /api/auth/logout` invalidates its session. Health and the registration, login, and Google sign-in initiation routes are public.
 
 ## Resources
 
@@ -28,6 +36,12 @@ In the Render service settings, use `npm install` as the build command and `npm 
 
 ## Routes
 
+- `POST /api/auth/register` - create a local account and sign in
+- `POST /api/auth/login` - sign in with email and password
+- `GET /api/auth/me` - get the current account (authenticated)
+- `POST /api/auth/logout` - invalidate the current session (authenticated)
+- `GET /api/auth/google` - begin Google sign-in (requires configured Google credentials)
+- `GET /api/auth/google/callback` - complete Google sign-in
 - `GET /api/movies` - get all favorite movies
 - `GET /api/movies/:id` - get a single movie
 - `POST /api/movies` - create a movie
@@ -70,13 +84,14 @@ Movie POST requests require `title`, `year` (1888-2100), `genre`, `director`, an
 npm run dev
 ```
 
-5. Test the movie and review endpoints in `test.rest` in order:
-  - health check
+5. Register once using the first request in `test.rest`, then run the login request to establish a session. The REST Client retains the session cookie for later requests.
+6. Test the movie and review endpoints in `test.rest` in order:
+  - health check and current account
   - get all movies
   - create and retrieve a movie
   - update and delete a movie
   - create, retrieve, update, and delete a review
-6. Replace `@movieId` and `@reviewId` with the IDs returned from each create request.
+7. Replace `@movieId` and `@reviewId` with the IDs returned from each create request.
 
 ## Example Request
 
