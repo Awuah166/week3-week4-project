@@ -1,11 +1,34 @@
 @baseUrl = http://localhost:3000
 @movieId = 000000000000000000000000
 @reviewId = 000000000000000000000000
+@email = alex@example.com
+@password = SecurePassword123!
+
+### Create an account (run once)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Sign in (run after registering, or to restore the session)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
 
 ### 1. Health check
 GET {{baseUrl}}/health
 
-### 2. Get all movies
+### 2. Get the signed-in account
+GET {{baseUrl}}/api/auth/me
+
+### 3. Get all movies (requires the session cookie from login)
 GET {{baseUrl}}/api/movies
 
 ### 3. Create a movie
@@ -97,3 +120,6 @@ PUT {{baseUrl}}/api/movies/{{movieId}}
 Content-Type: application/json
 
 {}
+
+### Sign out and invalidate the session
+POST {{baseUrl}}/api/auth/logout
